@@ -1,0 +1,14 @@
+{
+    "name": "mnlg/tokener",
+    "type": "library",
+    "description": "random token generator library",
+    "keywords": ["random", "token", "string", "library"],
+    "license": "MIT",
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": { "Mnlg\\Tokener\\": "src/" }
+    }
+}
