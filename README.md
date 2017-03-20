@@ -1,28 +1,24 @@
 # Tokener
 
-Random token generator.
+Tokener is a PHP random token generator.
 
-##How to install
+## How to install
 
-Update your composer.json manifest to require the mnlg/tokener package (see below). Run composer install or composer update to update your local vendor folder.
+It's recommended that you use [Composer](https://getcomposer.org/) to install Tokener.
 
-    {
-        "require": {
-            "mnlg/tokener": "*"
-        }
-    }
+    $ composer require mnlg/tokener "^1.0"
 
-##How to use
+## How to use
 
 Using Tokener is rather simple, by default it will generate the tokens using an alphabet composed of upper and lower case leters and numbers. You can set your own alphabet too.
 
-###Example
+### Example
 
     $tokener = new \Mnlg\Tokener\Tokener();
-    $token = $tokener->getToken(40); // get a 40 chars token
-    echo $token; // ex. token: RmgKfLEBt7DcVNRtvZibTswkBLfrPYB5wIy4bnrS
+    $token = $tokener->getToken(40); // Get a 40 chars token
+    echo $token;
 
-###Alphabet
+### Alphabet
 
 Tokener uses an alphabet to generate the tokens, the default alphabet generates tokens with upper and lower case letters plus numbers. This are the alphabet constants included with Tokener.
 
@@ -33,7 +29,7 @@ Tokener uses an alphabet to generate the tokens, the default alphabet generates 
 
 To use one of this alphabets you can pass it to the Tokener constructor:
 
-    $tokener = new Tokener(Tokener::NUMBERS); // generate number only tokens
+    $tokener = new Tokener(Tokener::NUMBERS); // Generate number only tokens
 
 The alphabet can also be changed once the Tokener object has been created using the `setAlphabet()` method:
 
@@ -41,7 +37,7 @@ The alphabet can also be changed once the Tokener object has been created using 
 
 Using custom alphabets is also possible by passing a custom string to the constructor or to the `setAlphabet()` method:
 
-    $tokener->setAlphabet('abcd123'); // generate random tokens with this characters only
+    $tokener->setAlphabet('abcd123'); // Generate random tokens with this characters only
 
 ## License
 
