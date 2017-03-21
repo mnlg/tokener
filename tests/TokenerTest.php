@@ -1,6 +1,6 @@
 <?php
 /**
- * MIT LICENSE
+ * MIT LICENSE.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -21,26 +21,25 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 use Mnlg\Tokener\Tokener;
 
 /**
- * Tokener tests
+ * Tokener tests.
  */
-class TokenerTest extends PHPUnit_Framework_TestCase {
-
+class TokenerTest extends PHPUnit_Framework_TestCase
+{
     /**
-     * test default alphabet
+     * Test default alphabet.
      */
     public function testTokenerDefaultAlphabet()
     {
         $tokener = new Tokener();
         $this->assertEquals($tokener->getAlphabet(),
-            Tokener::LOWER_CASE_LETTERS . Tokener::UPPER_CASE_LETTERS . Tokener::NUMBERS);
+            Tokener::LOWER_CASE_LETTERS.Tokener::UPPER_CASE_LETTERS.Tokener::NUMBERS);
     }
 
     /**
-     * test custom alphabet
+     * Test custom alphabet.
      */
     public function testTokenerCustomAlphabet()
     {
@@ -50,7 +49,7 @@ class TokenerTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * test setAlphabet
+     * Test setAlphabet.
      */
     public function testSetAlphabet()
     {
@@ -60,7 +59,7 @@ class TokenerTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * test token length
+     * Test token length.
      */
     public function testTokenLength()
     {
@@ -71,7 +70,7 @@ class TokenerTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * test token chars
+     * Test token chars.
      */
     public function testTokenChars()
     {
@@ -84,5 +83,24 @@ class TokenerTest extends PHPUnit_Framework_TestCase {
         $tokener->setAlphabet(Tokener::LOWER_CASE_LETTERS);
         $token = $tokener->getToken(40);
         $this->assertEquals($token, strtolower($token));
+    }
+
+    /**
+     * Test getToken with empty alphabet.
+     */
+    public function testGetTokenWithEmptyAlphabet()
+    {
+        $this->expectException(RuntimeException::class);
+        $tokener = new Tokener();
+        $tokener->setAlphabet('');
+    }
+
+    /**
+     * Test new token with non string alphabet.
+     */
+    public function testGetTokenWithANonStringAlphabet()
+    {
+        $this->expectException(RuntimeException::class);
+        $tokener = new Tokener(123456789);
     }
 }

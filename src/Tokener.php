@@ -1,6 +1,6 @@
 <?php
 /**
- * MIT LICENSE
+ * MIT LICENSE.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -21,65 +21,120 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace Mnlg\Tokener;
 
 /**
- * random token generator class
+ * Random token generator class.
  */
 class Tokener
 {
-
-    // alphabet constants
+    /**
+     * Lowercase letters alphabet.
+     *
+     * @const string
+     */
     const LOWER_CASE_LETTERS = 'abcdefghijklmnopqrstuvwxyz';
-    const UPPER_CASE_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const NUMBERS = '0123456789';
-    const SYMBOLS = '!$%*&/=?-.'; 
 
     /**
-     * current alphabet variable
-     * @var $alphabet
+     * Uppercase letters alphabet.
+     *
+     * @const string
+     */
+    const UPPER_CASE_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    /**
+     * Numbers alphabet.
+     *
+     * @const string
+     */
+    const NUMBERS = '0123456789';
+
+    /**
+     * Symbols alphabet.
+     *
+     * @const string
+     */
+    const SYMBOLS = '!$%*&/=?-.+:';
+
+    /**
+     * Current alphabet variable.
+     *
+     * @var string
      */
     protected $alphabet;
 
     /**
-     * constructor sets the alphabet to generate the codes
+     * Constructor sets the alphabet to generate the codes.
+     *
+     * @param string $alphabet
      */
     public function __construct($alphabet = null)
     {
         if ($alphabet === null) {
-            $this->alphabet = self::LOWER_CASE_LETTERS . self::UPPER_CASE_LETTERS . self::NUMBERS;
-        } else {
-            $this->alphabet = $alphabet;
+            $alphabet = self::LOWER_CASE_LETTERS.self::UPPER_CASE_LETTERS.self::NUMBERS;
         }
+
+        $this->setAlphabet($alphabet);
     }
 
     /**
-     * set the alphabet to generate the codes
+     * Set the alphabet to generate the codes.
+     *
      * @param string $alphabet
+     *
+     * @throws RuntimeException
      */
     public function setAlphabet($alphabet)
     {
+        if (!is_string($alphabet) || empty($alphabet)) {
+            throw new \RuntimeException('Alphabet must be a non empty string');
+        }
+
         $this->alphabet = $alphabet;
     }
 
     /**
-     * return the current alphabet
+     * Return the current alphabet.
+     *
+     * @return string
      */
-    public function getAlphabet() {
+    public function getAlphabet()
+    {
         return $this->alphabet;
     }
 
     /**
-     * crypto random
-     * return random number between $min and $max
+     * Generate a token with the specified length and alphabet.
+     *
+     * @param int $length
+     *
+     * @return string
+     */
+    public function getToken($length)
+    {
+        $token = '';
+        for ($i = 0; $i < $length; ++$i) {
+            $token .= $this->alphabet[$this->cryptoRandSecure(0, strlen($this->alphabet))];
+        }
+
+        return $token;
+    }
+
+    /**
+     * Return random number between $min and $max.
      *
      * @param int $min
      * @param int $max
+     *
+     * @return int
      */
-    protected function cryptoRandSecure($min, $max)
+    private function cryptoRandSecure($min, $max)
     {
         $range = $max - $min;
-        if ($range < 0) return $min;
+        if ($range < 0) {
+            return $min;
+        }
         $log = log($range, 2);
         $bytes = (int) ($log / 8) + 1;
         $bits = (int) $log + 1;
@@ -88,21 +143,7 @@ class Tokener
             $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
             $rnd = $rnd & $filter;
         } while ($rnd >= $range);
-        return $min + $rnd;
-    }
 
-    /**
-     * generate a token with the specified length and alphabet
-     *
-     * @param int $length
-     * @param string $alphabet
-     */
-    public function getToken($length)
-    {
-        $token = '';
-        for ($i=0 ; $i<$length ; $i++) {
-            $token .= $this->alphabet[$this->cryptoRandSecure(0, strlen($this->alphabet))];
-        }
-        return $token;
+        return $min + $rnd;
     }
 }
