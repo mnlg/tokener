@@ -4,11 +4,19 @@
     "description": "random token generator library",
     "keywords": ["random", "token", "string", "library"],
     "license": "MIT",
-    "require": {},
+    "require": {
+        "php": "^7.2 || ^8.0"
+    },
     "require-dev": {
         "phpunit/phpunit": "*"
     },
     "autoload": {
         "psr-4": { "Mnlg\\Tokener\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Tests\\": "tests/" }
+    },
+    "scripts": {
+        "phpunit": "phpunit"
     }
 }

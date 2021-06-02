@@ -21,12 +21,15 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+namespace Tests;
+
 use Mnlg\Tokener\Tokener;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tokener tests.
  */
-class TokenerTest extends PHPUnit_Framework_TestCase
+class TokenerTest extends TestCase
 {
     /**
      * Test default alphabet.
@@ -34,8 +37,10 @@ class TokenerTest extends PHPUnit_Framework_TestCase
     public function testTokenerDefaultAlphabet()
     {
         $tokener = new Tokener();
-        $this->assertEquals($tokener->getAlphabet(),
-            Tokener::LOWER_CASE_LETTERS.Tokener::UPPER_CASE_LETTERS.Tokener::NUMBERS);
+        $this->assertEquals(
+            $tokener->getAlphabet(),
+            Tokener::LOWER_CASE_LETTERS.Tokener::UPPER_CASE_LETTERS.Tokener::NUMBERS
+        );
     }
 
     /**
@@ -60,13 +65,14 @@ class TokenerTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test token length.
+     * 
+     * @dataProvider lengthProvider
      */
-    public function testTokenLength()
+    public function testTokenLength(int $length)
     {
-        $length = 40;
         $tokener = new Tokener();
         $token = $tokener->getToken($length);
-        $this->assertEquals(strlen($token), $length);
+        $this->assertEquals($length, strlen($token));
     }
 
     /**
@@ -74,14 +80,14 @@ class TokenerTest extends PHPUnit_Framework_TestCase
      */
     public function testTokenChars()
     {
-        // token is upper case
+        $length = 40;
+
         $tokener = new Tokener(Tokener::UPPER_CASE_LETTERS);
-        $token = $tokener->getToken(40);
+        $token = $tokener->getToken($length);
         $this->assertEquals($token, strtoupper($token));
 
-        // token us lower case
         $tokener->setAlphabet(Tokener::LOWER_CASE_LETTERS);
-        $token = $tokener->getToken(40);
+        $token = $tokener->getToken($length);
         $this->assertEquals($token, strtolower($token));
     }
 
@@ -90,17 +96,25 @@ class TokenerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTokenWithEmptyAlphabet()
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         $tokener = new Tokener();
         $tokener->setAlphabet('');
     }
 
     /**
-     * Test new token with non string alphabet.
+     * Test new token with an empty string alphabet.
      */
-    public function testGetTokenWithANonStringAlphabet()
+    public function testGetTokenWithEmptyStringAlphabet()
     {
-        $this->expectException(RuntimeException::class);
-        $tokener = new Tokener(123456789);
+        $this->expectException(\RuntimeException::class);
+        $tokener = new Tokener('');
+    }
+
+    /**
+     * Provide token lengths.
+     */
+    public function lengthProvider(): array
+    {
+        return [[10], [15], [40], [21], [7]];
     }
 }

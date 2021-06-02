@@ -69,7 +69,7 @@ class Tokener
      *
      * @param string $alphabet
      */
-    public function __construct($alphabet = null)
+    public function __construct(?string $alphabet = null)
     {
         if ($alphabet === null) {
             $alphabet = self::LOWER_CASE_LETTERS.self::UPPER_CASE_LETTERS.self::NUMBERS;
@@ -85,9 +85,9 @@ class Tokener
      *
      * @throws RuntimeException
      */
-    public function setAlphabet($alphabet)
+    public function setAlphabet(string $alphabet): void
     {
-        if (!is_string($alphabet) || empty($alphabet)) {
+        if (empty($alphabet)) {
             throw new \RuntimeException('Alphabet must be a non empty string');
         }
 
@@ -99,7 +99,7 @@ class Tokener
      *
      * @return string
      */
-    public function getAlphabet()
+    public function getAlphabet(): string
     {
         return $this->alphabet;
     }
@@ -111,39 +111,14 @@ class Tokener
      *
      * @return string
      */
-    public function getToken($length)
+    public function getToken(int $length): string
     {
         $token = '';
+        $maxAlphabetIndex = strlen($this->alphabet) - 1;
         for ($i = 0; $i < $length; ++$i) {
-            $token .= $this->alphabet[$this->cryptoRandSecure(0, strlen($this->alphabet))];
+            $token .= $this->alphabet[random_int(0, $maxAlphabetIndex)];
         }
 
         return $token;
-    }
-
-    /**
-     * Return random number between $min and $max.
-     *
-     * @param int $min
-     * @param int $max
-     *
-     * @return int
-     */
-    private function cryptoRandSecure($min, $max)
-    {
-        $range = $max - $min;
-        if ($range < 0) {
-            return $min;
-        }
-        $log = log($range, 2);
-        $bytes = (int) ($log / 8) + 1;
-        $bits = (int) $log + 1;
-        $filter = (int) (1 << $bits) - 1;
-        do {
-            $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
-            $rnd = $rnd & $filter;
-        } while ($rnd >= $range);
-
-        return $min + $rnd;
     }
 }

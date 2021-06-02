@@ -6,7 +6,7 @@ Tokener is a PHP random token generator.
 
 It's recommended that you use [Composer](https://getcomposer.org/) to install Tokener.
 
-    $ composer require mnlg/tokener "^1.0"
+    $ composer require mnlg/tokener "^2.0"
 
 ## How to use
 
